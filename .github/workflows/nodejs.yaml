@@ -1,0 +1,24 @@
+name: module/nodejs
+
+on:
+  pull_request:
+    types: [opened, reopened]
+    paths:
+      - ./nodejs
+  push:
+    branches:
+      - "main"
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: dagger/run-tests
+        uses: dagger/dagger-for-github@v6
+        with:
+          version: "latest"
+          verb: call
+          module: ./nodejs/tests
+          cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
