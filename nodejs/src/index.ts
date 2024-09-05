@@ -22,20 +22,22 @@ class nodejs {
     directory: Directory,
     version: string = "latest"
   ): Promise<Container> {
-    const packageJson = this.directory.file("package.json");
-    const cacheVolumeName = `${
-      JSON.parse(await packageJson.contents()).name as string
-    }-bun-modules`;
+    // const packageJson = this.directory.file("package.json");
+    // const cacheVolumeName = `${
+    //   JSON.parse(await packageJson.contents()).name as string
+    // }-bun-modules`;
 
-    return dag
-      .container()
-      .from(`oven/bun:${version}`)
-      .withMountedCache("/node_modules", dag.cacheVolume(cacheVolumeName), {
-        sharing: CacheSharingMode.Shared,
-      })
-      .withEntrypoint(["bun"])
-      .withMountedDirectory("/code", directory)
-      .withWorkdir("/code");
+    return (
+      dag
+        .container()
+        .from(`oven/bun:${version}`)
+        // .withMountedCache("/node_modules", dag.cacheVolume(cacheVolumeName), {
+        //   sharing: CacheSharingMode.Shared,
+        // })
+        .withEntrypoint(["bun"])
+        .withMountedDirectory("/code", directory)
+        .withWorkdir("/code")
+    );
   }
 
   @func()
@@ -43,19 +45,21 @@ class nodejs {
     directory: Directory,
     version: string = "latest"
   ): Promise<Container> {
-    const packageJson = this.directory.file("package.json");
-    const cacheVolumeName = `${
-      JSON.parse(await packageJson.contents()).name as string
-    }-npm-modules`;
+    // const packageJson = this.directory.file("package.json");
+    // const cacheVolumeName = `${
+    //   JSON.parse(await packageJson.contents()).name as string
+    // }-npm-modules`;
 
-    return dag
-      .container()
-      .from(`node:${version}`)
-      .withMountedCache("/node_modules", dag.cacheVolume(cacheVolumeName), {
-        sharing: CacheSharingMode.Shared,
-      })
-      .withEntrypoint(["npm"])
-      .withMountedDirectory("/code", directory)
-      .withWorkdir("/code");
+    return (
+      dag
+        .container()
+        .from(`node:${version}`)
+        // .withMountedCache("/node_modules", dag.cacheVolume(cacheVolumeName), {
+        //   sharing: CacheSharingMode.Shared,
+        // })
+        .withEntrypoint(["npm"])
+        .withMountedDirectory("/code", directory)
+        .withWorkdir("/code")
+    );
   }
 }
