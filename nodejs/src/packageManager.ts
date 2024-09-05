@@ -6,19 +6,15 @@ import {
   CacheSharingMode,
 } from "@dagger.io/dagger";
 
-interface PackageManagerConfig {
-  image: string;
-  version: string;
-  executable: string;
-}
-
 export abstract class PackageManager {
-  protected readonly config: PackageManagerConfig;
+  protected readonly version: string;
   protected readonly directory: Directory;
+  protected abstract image: string;
+  protected abstract executable: string;
 
-  constructor(directory: Directory, config: PackageManagerConfig) {
+  constructor(directory: Directory, version: string) {
     this.directory = directory;
-    this.config = config;
+    this.version = version;
   }
 
   protected async getCacheName(): Promise<string> {
@@ -33,12 +29,17 @@ export abstract class PackageManager {
 
     return dag
       .container()
-      .from(`${this.config.image}:${this.config.version}`)
+      .from(`${this.image}:${this.version}`)
       .withMountedDirectory("/code", this.directory)
       .withWorkdir("/code")
       .withMountedCache("/node_modules", dag.cacheVolume(cacheVolumeName), {
         sharing: CacheSharingMode.Shared,
       })
-      .withEntrypoint([this.config.executable]);
+      .withEntrypoint([this.executable]);
+  }
+
+  @func()
+  async install(): Promise<Container> {
+    return (await this.setup()).withExec(["install"]);
   }
 }
