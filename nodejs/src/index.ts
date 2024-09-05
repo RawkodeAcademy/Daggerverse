@@ -1,14 +1,16 @@
 import { object, func, Directory } from "@dagger.io/dagger";
-import { PackageManager } from "./packageManager";
+import { Bun } from "./bun";
+import { Npm } from "./npm";
 
 @object()
-class NodeJS {
+class nodejs {
   @func()
-  withPackageManager<T extends PackageManager>(
-    type: new (directory: Directory, version: string) => T,
-    directory: Directory,
-    version: string
-  ): T {
-    return new type(directory, version);
+  bun(directory: Directory, version: string): Bun {
+    return new Bun(directory, version);
+  }
+
+  @func()
+  npm(directory: Directory, version: string): Npm {
+    return new Npm(directory, version);
   }
 }
