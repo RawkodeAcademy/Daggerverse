@@ -9,8 +9,8 @@ on:
     branches:
       - "main"
 jobs:
-  test:
-    name: test
+  test-bun:
+    name: test-bun
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -21,4 +21,5 @@ jobs:
           version: "latest"
           verb: call
           module: ./nodejs/tests
+          args: test-bun
           cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
