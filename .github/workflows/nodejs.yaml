@@ -2,12 +2,14 @@ name: module/nodejs
 
 on:
   pull_request:
-    types: [opened, reopened]
     paths:
-      - ./nodejs/**
+      - nodejs/**
   push:
     branches:
       - "main"
+    paths:
+      - nodejs/**
+
 jobs:
   test-bun:
     name: test-bun

@@ -2,12 +2,14 @@ name: module/sqld
 
 on:
   pull_request:
-    types: [opened, reopened]
     paths:
-      - ./sqld/**
+      - sqld/**
   push:
     branches:
       - "main"
+    paths:
+      - sqld/**
+
 jobs:
   test-default-port:
     name: test-default-port
