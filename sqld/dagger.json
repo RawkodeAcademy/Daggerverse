@@ -1,0 +1,6 @@
+{
+	"name": "sqld",
+	"sdk": "typescript",
+	"runtime": "bun",
+	"engineVersion": "v0.12.7"
+}

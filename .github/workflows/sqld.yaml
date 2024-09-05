@@ -1,0 +1,40 @@
+name: module/sqld
+
+on:
+  pull_request:
+    types: [opened, reopened]
+    paths:
+      - ./sqld/**
+  push:
+    branches:
+      - "main"
+jobs:
+  test-default-port:
+    name: test-default-port
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: dagger/run-tests
+        uses: dagger/dagger-for-github@v6
+        with:
+          version: "latest"
+          verb: call
+          module: ./sqld/tests
+          args: test-default-port
+          cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
+
+  test-custom-port:
+    name: test-custom-port
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: dagger/run-tests
+        uses: dagger/dagger-for-github@v6
+        with:
+          version: "latest"
+          verb: call
+          module: ./sqld/tests
+          args: test-custom-port
+          cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
