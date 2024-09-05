@@ -2,5 +2,6 @@
   "name": "nodejs",
   "engineVersion": "v0.12.7",
   "sdk": "typescript",
+  "runtime": "bun",
   "source": "."
 }
