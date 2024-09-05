@@ -1,23 +1,18 @@
 import { object, func, Directory } from "@dagger.io/dagger";
-
-import { Bun } from "./bun";
-import { Npm } from "./npm";
+import { PackageManager } from "./packageManager";
 
 @object()
 class NodeJS {
+  protected readonly manager: PackageManager;
   protected readonly directory: Directory;
 
-  constructor(directory: Directory) {
+  constructor(directory: Directory, manager: PackageManager) {
+    this.manager = manager;
     this.directory = directory;
   }
 
   @func()
-  bun(version: string = "latest"): Bun {
-    return new Bun(this.directory, version);
-  }
-
-  @func()
-  npm(version: string = "latest"): Npm {
-    return new Npm(this.directory, version);
+  async install() {
+    return (await this.manager.setup()).withExec(["install"]);
   }
 }

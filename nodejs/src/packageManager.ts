@@ -28,8 +28,9 @@ export abstract class PackageManager {
     }-bun-modules`;
   }
 
-  protected async setup(): Promise<Container> {
+  public async setup(): Promise<Container> {
     const cacheVolumeName = await this.getCacheName();
+
     return dag
       .container()
       .from(`${this.config.image}:${this.config.version}`)
@@ -37,11 +38,7 @@ export abstract class PackageManager {
       .withWorkdir("/code")
       .withMountedCache("/node_modules", dag.cacheVolume(cacheVolumeName), {
         sharing: CacheSharingMode.Shared,
-      });
-  }
-
-  @func()
-  public async install(): Promise<Container> {
-    return (await this.setup()).withExec([this.config.executable, "install"]);
+      })
+      .withEntrypoint([this.config.executable]);
   }
 }
