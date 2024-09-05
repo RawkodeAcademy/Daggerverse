@@ -15,17 +15,18 @@ import {
 
 @object()
 class nodejs {
-  private readonly directory: Directory;
-
   @func()
   async withBun(
     directory: Directory,
     version: string = "latest"
   ): Promise<Container> {
-    const packageJson = this.directory.file("package.json");
+    console.log(`Searching for package.json`);
+    const packageJson = directory.file("package.json");
+    console.log(`Found. Finding cacheVolumeName ...`);
     const cacheVolumeName = `${
       JSON.parse(await packageJson.contents()).name as string
     }-bun-modules`;
+    console.log(`Found: ${cacheVolumeName}`);
 
     return dag
       .container()
@@ -43,7 +44,7 @@ class nodejs {
     directory: Directory,
     version: string = "latest"
   ): Promise<Container> {
-    const packageJson = this.directory.file("package.json");
+    const packageJson = directory.file("package.json");
     const cacheVolumeName = `${
       JSON.parse(await packageJson.contents()).name as string
     }-npm-modules`;
